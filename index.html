@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.4 system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>LCS Holiday Camps</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Layout: a school exercise-book header (Seyès ruling, red margin), then a filter bar and a single column of provider cards. */
+:root {
+  --paper: #f8f9fe;
+  --surface: #ffffff;
+  --ink: #1b2140;
+  --muted: #59618a;
+  --rule: #cdd5f3;
+  --rule-strong: #a9b6ec;
+  --margin: #d9473c;
+  --accent: #2a41b0;
+  --accent-ink: #ffffff;
+  --ok: #17704a;
+  --ok-bg: #e3f4ec;
+  --warn: #8f5600;
+  --warn-bg: #fdf0db;
+  --none: #646a8a;
+  --none-bg: #eceef7;
+  --font-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Source Sans 3", "Helvetica Neue", Arial, system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #11142a; --surface: #191d38; --ink: #e8ebf9; --muted: #a3aacb;
+    --rule: #262d57; --rule-strong: #38427a; --margin: #ff786c; --accent: #94a5ff; --accent-ink: #11142a;
+    --ok: #6fd8a4; --ok-bg: #173a2c; --warn: #f2b85c; --warn-bg: #3a2c15; --none: #9aa0bf; --none-bg: #23284a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #11142a; --surface: #191d38; --ink: #e8ebf9; --muted: #a3aacb;
+  --rule: #262d57; --rule-strong: #38427a; --margin: #ff786c; --accent: #94a5ff; --accent-ink: #11142a;
+  --ok: #6fd8a4; --ok-bg: #173a2c; --warn: #f2b85c; --warn-bg: #3a2c15; --none: #9aa0bf; --none-bg: #23284a;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--paper); color: var(--ink);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.5;
+}
+.wrap {
+  max-width: 880px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+/* Exercise-book header */
+.cahier {
+  border-bottom: 1px solid var(--rule-strong);
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(to right, transparent calc(max(16px, env(safe-area-inset-left, 0px)) + 34px), var(--margin) calc(max(16px, env(safe-area-inset-left, 0px)) + 34px), var(--margin) calc(max(16px, env(safe-area-inset-left, 0px)) + 36px), transparent calc(max(16px, env(safe-area-inset-left, 0px)) + 36px)),
+    repeating-linear-gradient(to bottom, transparent 0, transparent 31px, var(--rule) 31px, var(--rule) 32px);
+}
+.cahier .wrap { padding-block: 28px 30px; }
+.cahier-inner { padding-left: 52px; }
+.topline { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.eyebrow { font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.lang { display: inline-flex; border: 1px solid var(--rule-strong); border-radius: 999px; overflow: hidden; background: var(--surface); }
+.lang button {
+  font: 600 14px/1 var(--font-body); color: var(--muted); background: transparent;
+  border: 0; padding: 8px 14px; cursor: pointer;
+}
+.lang button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+h1 {
+  font-family: var(--font-display); font-weight: 800; font-size: clamp(32px, 6vw, 48px);
+  line-height: 1.05; letter-spacing: -.02em; margin: 18px 0 10px; text-wrap: balance;
+}
+.lede { margin: 0; max-width: 60ch; color: var(--muted); font-size: 17px; }
+.dates-strip { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
+.day {
+  font-variant-numeric: tabular-nums; text-align: center; min-width: 58px;
+  background: var(--surface); border: 1px solid var(--rule-strong); border-radius: 8px; padding: 6px 8px;
+}
+.day b { display: block; font-family: var(--font-display); font-size: 20px; line-height: 1.1; }
+.day span { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+
+/* Filters */
+.filters { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); border-bottom: 1px solid var(--rule); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+.filters .wrap { padding-block: 12px; display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; }
+.seg { display: inline-flex; border: 1px solid var(--rule-strong); border-radius: 10px; overflow: hidden; background: var(--surface); }
+.seg button { font: 600 15px/1 var(--font-body); border: 0; background: transparent; color: var(--ink); padding: 10px 14px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.field { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; color: var(--muted); }
+select {
+  font: 600 15px var(--font-body); color: var(--ink); background: var(--surface);
+  border: 1px solid var(--rule-strong); border-radius: 10px; padding: 8px 10px;
+}
+.chips { display: flex; flex-wrap: wrap; gap: 6px; width: 100%; }
+.chip {
+  font: 600 14px/1 var(--font-body); color: var(--ink); background: var(--surface);
+  border: 1px solid var(--rule-strong); border-radius: 999px; padding: 7px 12px; cursor: pointer;
+}
+.chip[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+button:focus-visible, select:focus-visible, a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* List */
+main .wrap { padding-block: 20px 40px; }
+.count { color: var(--muted); font-size: 15px; margin: 0 0 14px; }
+.list { display: grid; gap: 14px; }
+.card {
+  background: var(--surface); border: 1px solid var(--rule); border-radius: 12px;
+  padding: 18px 18px 16px; display: grid; gap: 12px; min-width: 0;
+}
+.card.dim { background: transparent; }
+.card-head { display: flex; justify-content: space-between; gap: 10px 16px; align-items: flex-start; flex-wrap: wrap; }
+.card h2 { font-family: var(--font-display); font-weight: 700; font-size: 22px; line-height: 1.2; margin: 0; text-wrap: balance; }
+.cat { font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-top: 2px; }
+.pill { font-size: 14px; font-weight: 700; border-radius: 999px; padding: 4px 11px; white-space: nowrap; }
+.pill.confirmed { color: var(--ok); background: var(--ok-bg); }
+.pill.request, .pill.tbc { color: var(--warn); background: var(--warn-bg); }
+.pill.none { color: var(--none); background: var(--none-bg); }
+.when { font-weight: 700; font-size: 17px; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px 18px; margin: 0; }
+.facts div { min-width: 0; }
+.facts dt { font-size: 12px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.facts dd { margin: 2px 0 0; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.note { margin: 0; color: var(--muted); font-size: 15px; max-width: 70ch; }
+.card-foot { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; border-top: 1px dashed var(--rule-strong); padding-top: 12px; }
+.contact { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 15px; min-width: 0; }
+.contact span { user-select: all; overflow-wrap: anywhere; }
+.copy { font: 600 13px var(--font-body); color: var(--accent); background: none; border: 0; padding: 0 2px; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.book {
+  font: 700 15px/1 var(--font-body); color: var(--accent-ink); background: var(--accent);
+  border-radius: 10px; padding: 11px 16px; text-decoration: none; white-space: nowrap;
+}
+.empty { border: 1px dashed var(--rule-strong); border-radius: 12px; padding: 24px; color: var(--muted); text-align: center; }
+footer { border-top: 1px solid var(--rule); color: var(--muted); font-size: 14px; }
+footer .wrap { padding-block: 20px 32px; display: grid; gap: 8px; }
+footer p { margin: 0; max-width: 70ch; }
+.provider-cta a { color: var(--accent); font-weight: 700; }
+@media (max-width: 520px) {
+  .cahier-inner { padding-left: 44px; }
+  .card { padding: 16px 14px 14px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .card { transition: border-color .15s; }
+  .card:hover { border-color: var(--rule-strong); }
+}
+</style>
+
+<header class="cahier">
+  <div class="wrap">
+    <div class="cahier-inner">
+      <div class="topline">
+        <span class="eyebrow" data-i18n="eyebrow"></span>
+        <div class="lang" role="group" aria-label="Language / Langue">
+          <button type="button" id="lang-en" data-lang="en" aria-pressed="true">EN</button>
+          <button type="button" id="lang-fr" data-lang="fr" aria-pressed="false">FR</button>
+        </div>
+      </div>
+      <h1 data-i18n="title"></h1>
+      <p class="lede" data-i18n="lede"></p>
+      <div class="dates-strip" id="dates-strip" aria-label="November holiday dates"></div>
+    </div>
+  </div>
+</header>
+
+<nav class="filters" aria-label="Filters">
+  <div class="wrap">
+    <div class="seg" role="group" aria-label="Period">
+      <button type="button" id="view-nov" data-view="nov" aria-pressed="true"></button>
+      <button type="button" id="view-all" data-view="all" aria-pressed="false"></button>
+    </div>
+    <label class="field" for="age"><span data-i18n="ageLabel"></span>
+      <select id="age"></select>
+    </label>
+    <div class="chips" id="chips" role="group" aria-label="Activity type"></div>
+  </div>
+</nav>
+
+<main>
+  <div class="wrap">
+    <p class="count" id="count" aria-live="polite"></p>
+    <div class="list" id="list"></div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p data-i18n="footer"></p>
+    <p data-i18n="check"></p>
+    <p id="updated"></p>
+    <p class="provider-cta" id="provider-cta" hidden><span data-i18n="providerCta"></span> <a id="form-link" href="#" target="_blank" rel="noopener" data-i18n="providerLink"></a></p>
+  </div>
+</footer>
+
+<!-- DIRECTORY DATA: regenerated each morning from the approved rows of the "Activity Provider - LCS" Google Sheet. -->
+<script type="application/json" id="directory-data">
+{
+  "updated": "2026-10-20",
+  "formUrl": null,
+  "holiday": ["2026-11-09", "2026-11-10", "2026-11-11", "2026-11-12", "2026-11-13"],
+  "providers": [
+    {
+      "name": "Sydney Circus Company", "cat": "circus", "location": "1/42 William Street, Botany",
+      "ageMin": 5, "ageMax": 12, "places": {"en": "30 per day", "fr": "30 par jour"},
+      "price": {"en": "$120 per day", "fr": "120 $ par jour"},
+      "nov": "confirmed", "novDates": {"en": "Tue 10 and Thu 12 Nov", "fr": "Mar. 10 et jeu. 12 nov."},
+      "note": null,
+      "email": "kim@sydneycircuscompany.com", "phone": "0420 201 466",
+      "url": "https://www.sydneycircuscompany.com/kids-circus-workshops"
+    },
+    {
+      "name": "Le Petit Prince", "cat": "language", "location": "Maroubra",
+      "ageMin": 3, "ageMax": 7, "places": {"en": "15 per day", "fr": "15 par jour"},
+      "price": {"en": "$143 per day, aftercare $26", "fr": "143 $ par jour, garderie 26 $"},
+      "nov": "confirmed", "novDates": {"en": "Mon 9 to Fri 13 Nov", "fr": "Du lun. 9 au ven. 13 nov."},
+      "note": {"en": "Camp held entirely in French, for Maternelle to CP. 8:45am to 3:15pm, aftercare until 5:15pm. Children must be toilet trained.", "fr": "Stage entièrement en français, de la maternelle au CP. 8h45 à 15h15, garderie jusqu'à 17h15. Les enfants doivent être propres."},
+      "email": "jess@lepetitprince.com.au", "phone": "0425 255 626",
+      "url": "https://www.lepetitprince.com.au/holiday-camps/"
+    },
+    {
+      "name": "Toon Creations", "cat": "arts", "location": "16 Francis St, Bondi Beach",
+      "ageMin": 5, "ageMax": 12, "places": {"en": "Up to 30", "fr": "Jusqu'à 30"},
+      "price": {"en": "$95 per day", "fr": "95 $ par jour"},
+      "nov": "confirmed", "novDates": {"en": "Tue 10 and Thu 12 Nov", "fr": "Mar. 10 et jeu. 12 nov."},
+      "note": {"en": "Cartoon drawing workshops. The November program is still being finalised. Use code LSC Friend for a discount when booking with a friend or sibling.", "fr": "Ateliers de dessin de bande dessinée. Le programme de novembre est en cours de finalisation. Code LSC Friend : réduction pour une réservation avec un ami ou un frère ou une sœur."},
+      "email": "info@tooncreations.net", "phone": "0411 789 878",
+      "url": "https://www.tooncreations.net/booking-calendar/10-13-november-bondi-studio"
+    },
+    {
+      "name": "Little Ginger Studio", "cat": "arts", "location": "60 Clovelly Rd, Randwick",
+      "ageMin": 5, "ageMax": 12, "places": null,
+      "price": {"en": "$115 per day ($105 second child, $95 third)", "fr": "115 $ par jour (105 $ 2e enfant, 95 $ 3e)"},
+      "nov": "request", "novDates": {"en": "Tue 10 Nov, if at least 12 children register", "fr": "Mar. 10 nov., si au moins 12 enfants s'inscrivent"},
+      "note": {"en": "Art camp, 9am to 3pm, aftercare until 4pm. A dedicated LCS day will only run with enough interest, so contact the studio to register.", "fr": "Stage d'arts plastiques, 9h à 15h, garderie jusqu'à 16h. Une journée réservée au LCS n'aura lieu qu'avec assez d'inscrits : contactez le studio."},
+      "email": "danielle@littlegingerstudio.com", "phone": "0407 773 743",
+      "url": "https://www.littlegingerstudio.com/school-holiday-care"
+    },
+    {
+      "name": "Woollahra Sailing Club", "cat": "water", "location": "2 Vickery Ave, Rose Bay",
+      "ageMin": 6, "ageMax": 17, "places": null,
+      "price": {"en": "From $150 per day (past rates)", "fr": "À partir de 150 $ par jour (tarifs précédents)"},
+      "nov": "tbc", "novDates": null,
+      "note": {"en": "Sailing and water sports camps, 9am to 3pm. We have asked about November dates.", "fr": "Stages de voile et sports nautiques, 9h à 15h. Nous avons demandé les dates de novembre."},
+      "email": "sailing.school@woollahrasailingclub.org.au", "phone": "02 9371 9805",
+      "url": "https://kidsbook.com.au/p/woollahrasailingschool"
+    },
+    {
+      "name": "Happy Builder", "cat": "stem", "location": {"en": "Mobile, comes to your venue", "fr": "Mobile, se déplace"},
+      "ageMin": null, "ageMax": null, "places": null,
+      "price": {"en": "On enquiry", "fr": "Sur demande"},
+      "nov": "tbc", "novDates": null,
+      "note": {"en": "KAPLA wooden-plank building workshops. We have asked about November dates.", "fr": "Ateliers de construction KAPLA. Nous avons demandé les dates de novembre."},
+      "email": "info@happybuilder.com.au", "phone": "0418 963 853",
+      "url": "https://www.happybuilder.com.au/contact"
+    },
+    {
+      "name": "Monster Skate Park", "cat": "sport", "location": "1A Grand Parade, Sydney Olympic Park",
+      "ageMin": 4, "ageMax": 18, "places": null,
+      "price": {"en": "From $149 per day", "fr": "À partir de 149 $ par jour"},
+      "nov": "none", "novDates": null,
+      "note": {"en": "Skate, scooter and BMX camps, 8:30am to 5pm, food and gear included. Runs during NSW school holidays.", "fr": "Stages de skate, trottinette et BMX, 8h30 à 17h, repas et équipement inclus. Pendant les vacances scolaires NSW."},
+      "email": "info@monsterskatepark.com", "phone": "02 8459 7433",
+      "url": "https://monsterskatepark.com/camps/"
+    },
+    {
+      "name": "Murphy Sports", "cat": "sport", "location": "Waverley College, Waverley",
+      "ageMin": null, "ageMax": null, "places": null,
+      "price": {"en": "$60 per day", "fr": "60 $ par jour"},
+      "nov": "none", "novDates": null,
+      "note": {"en": "Multi-sports holiday club, 8:15am to 3pm, aftercare until 5:30pm. Runs during NSW school holidays.", "fr": "Club multisports, 8h15 à 15h, garderie jusqu'à 17h30. Pendant les vacances scolaires NSW."},
+      "email": "murphysports@gmail.com", "phone": "0424 745 778",
+      "url": "https://murphysports.com.au/book-now/"
+    },
+    {
+      "name": "UNSW Fitness & Aquatic Centre", "cat": "sport", "location": "UNSW, Kensington",
+      "ageMin": 6, "ageMax": 13, "places": null,
+      "price": {"en": "$125 per day", "fr": "125 $ par jour"},
+      "nov": "none", "novDates": null,
+      "note": {"en": "Holiday camp with an optional food package ($20 per day). Runs during NSW school holidays.", "fr": "Stage de vacances, repas en option (20 $ par jour). Pendant les vacances scolaires NSW."},
+      "email": "info@unswfac.com.au", "phone": "02 9662 5112",
+      "url": "https://UNSWFAC_SHP_Sept26.eventbrite.com.au"
+    },
+    {
+      "name": "Elaine G With Love", "cat": "arts", "location": "Chifley",
+      "ageMin": 8, "ageMax": 14, "places": {"en": "6 per workshop", "fr": "6 par atelier"},
+      "price": {"en": "$148 per day", "fr": "148 $ par jour"},
+      "nov": "none", "novDates": null,
+      "note": {"en": "Ceramics workshops, 9:30am to 3pm. Away in November; next workshops in December.", "fr": "Ateliers de céramique, 9h30 à 15h. Absente en novembre ; prochains ateliers en décembre."},
+      "email": "hello@elainegwithlove.com", "phone": null,
+      "url": "https://kidsbook.com.au/activity/ceramic-workshop-with-elaine-g---sep---oct-2026"
+    }
+  ]
+}
+</script>
+
+<script>
+(function () {
+  var DATA = JSON.parse(document.getElementById("directory-data").textContent);
+
+  var T = {
+    en: {
+      eyebrow: "Parents & Friends Association · Lycée Condorcet Sydney",
+      title: "LCS holiday camps",
+      lede: "Camps and activities for LCS families during the November holidays, when NSW schools are still in term and few programs run.",
+      viewNov: "November holidays", viewAll: "All providers",
+      ageLabel: "Child's age", anyAge: "Any age", years: " yrs",
+      cats: { all: "All activities", arts: "Arts & crafts", circus: "Circus", language: "French language", sport: "Sport", water: "Sailing & water", stem: "Building & STEM" },
+      status: { confirmed: "Confirmed for LCS", request: "On request", tbc: "Awaiting reply", none: "Not in November" },
+      novPrefix: "November: ",
+      noNov: "No November dates",
+      tbcDates: "November dates to be confirmed",
+      ages: "Ages", agesNone: "Not listed", price: "Price", where: "Where", places: "Places",
+      book: "Book or enquire", copy: "Copy", copied: "Copied",
+      count: function (n, v) { return n + (n === 1 ? " provider" : " providers") + (v === "nov" ? " for the November holidays" : " in the directory"); },
+      empty: "No providers match these filters. Try another age or activity.",
+      footer: "Compiled by the Parents and Friends Association of Lycée Condorcet Sydney. Details are supplied by each provider.",
+      check: "Please confirm dates, prices and availability with the provider before booking.",
+      updated: "Last updated ",
+      providerCta: "Run a holiday program?", providerLink: "Submit your camp",
+      dow: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], month: "Nov"
+    },
+    fr: {
+      eyebrow: "Association des Parents et Amis · Lycée Condorcet Sydney",
+      title: "Stages de vacances LCS",
+      lede: "Stages et activités pour les familles du LCS pendant les vacances de novembre, alors que les écoles NSW sont en période scolaire et que peu de programmes sont proposés.",
+      viewNov: "Vacances de novembre", viewAll: "Tous les prestataires",
+      ageLabel: "Âge de l'enfant", anyAge: "Tous âges", years: " ans",
+      cats: { all: "Toutes les activités", arts: "Arts plastiques", circus: "Cirque", language: "Langue française", sport: "Sport", water: "Voile et nautique", stem: "Construction et sciences" },
+      status: { confirmed: "Confirmé pour le LCS", request: "Sur demande", tbc: "En attente de réponse", none: "Pas en novembre" },
+      novPrefix: "Novembre : ",
+      noNov: "Pas de dates en novembre",
+      tbcDates: "Dates de novembre à confirmer",
+      ages: "Âges", agesNone: "Non précisé", price: "Tarif", where: "Lieu", places: "Places",
+      book: "Réserver ou se renseigner", copy: "Copier", copied: "Copié",
+      count: function (n, v) { return n + (n === 1 ? " prestataire" : " prestataires") + (v === "nov" ? " pour les vacances de novembre" : " dans l'annuaire"); },
+      empty: "Aucun prestataire ne correspond à ces filtres. Essayez un autre âge ou une autre activité.",
+      footer: "Annuaire réalisé par l'Association des Parents et Amis du Lycée Condorcet Sydney. Les informations sont fournies par chaque prestataire.",
+      check: "Merci de vérifier les dates, tarifs et disponibilités auprès du prestataire avant de réserver.",
+      updated: "Dernière mise à jour : ",
+      providerCta: "Vous proposez un programme de vacances ?", providerLink: "Inscrire votre stage",
+      dow: ["dim.", "lun.", "mar.", "mer.", "jeu.", "ven.", "sam."], month: "nov."
+    }
+  };
+
+  var order = { confirmed: 0, request: 1, tbc: 2, none: 3 };
+  var state = { lang: "en", view: "nov", age: "", cat: "all" };
+
+  try {
+    var saved = localStorage.getItem("lcs-lang");
+    if (saved === "en" || saved === "fr") state.lang = saved;
+    else if ((navigator.language || "").toLowerCase().indexOf("fr") === 0) state.lang = "fr";
+  } catch (e) {}
+
+  function el(tag, attrs, kids) {
+    var n = document.createElement(tag);
+    if (attrs) for (var k in attrs) {
+      if (k === "text") n.textContent = attrs[k];
+      else if (k === "cls") n.className = attrs[k];
+      else n.setAttribute(k, attrs[k]);
+    }
+    (kids || []).forEach(function (c) { if (c) n.appendChild(c); });
+    return n;
+  }
+  function L(v) { if (v == null) return null; return typeof v === "string" ? v : (v[state.lang] || v.en); }
+
+  function copyText(btn, text) {
+    var t = T[state.lang];
+    function done() { btn.textContent = t.copied; setTimeout(function () { btn.textContent = t.copy; }, 1500); }
+    try {
+      navigator.clipboard.writeText(text).then(done, function () { selectSibling(btn); });
+    } catch (e) { selectSibling(btn); }
+  }
+  function selectSibling(btn) {
+    var span = btn.previousElementSibling;
+    if (!span) return;
+    var r = document.createRange(); r.selectNodeContents(span);
+    var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+  }
+
+  function renderStatic() {
+    var t = T[state.lang];
+    document.documentElement.lang = state.lang;
+    document.querySelectorAll("[data-i18n]").forEach(function (n) { n.textContent = t[n.getAttribute("data-i18n")]; });
+    document.getElementById("view-nov").textContent = t.viewNov;
+    document.getElementById("view-all").textContent = t.viewAll;
+    ["en", "fr"].forEach(function (l) { document.getElementById("lang-" + l).setAttribute("aria-pressed", String(state.lang === l)); });
+    ["nov", "all"].forEach(function (v) { document.getElementById("view-" + v).setAttribute("aria-pressed", String(state.view === v)); });
+
+    var strip = document.getElementById("dates-strip");
+    strip.textContent = "";
+    DATA.holiday.forEach(function (iso) {
+      var d = new Date(iso + "T12:00:00");
+      strip.appendChild(el("div", { cls: "day" }, [
+        el("span", { text: t.dow[d.getDay()] }),
+        el("b", { text: String(d.getDate()) }),
+        el("span", { text: t.month })
+      ]));
+    });
+
+    var sel = document.getElementById("age");
+    sel.textContent = "";
+    sel.appendChild(el("option", { value: "", text: t.anyAge }));
+    for (var a = 3; a <= 17; a++) sel.appendChild(el("option", { value: String(a), text: a + t.years }));
+    sel.value = state.age;
+
+    var cats = ["all"];
+    DATA.providers.forEach(function (p) { if (cats.indexOf(p.cat) < 0) cats.push(p.cat); });
+    var chips = document.getElementById("chips");
+    chips.textContent = "";
+    cats.forEach(function (c) {
+      var b = el("button", { type: "button", cls: "chip", id: "cat-" + c, "aria-pressed": String(state.cat === c), text: t.cats[c] || c });
+      b.addEventListener("click", function () { state.cat = c; renderStatic(); renderList(); });
+      chips.appendChild(b);
+    });
+
+    var d = new Date(DATA.updated + "T12:00:00");
+    document.getElementById("updated").textContent = t.updated + d.toLocaleDateString(state.lang === "fr" ? "fr-FR" : "en-AU", { day: "numeric", month: "long", year: "numeric" });
+
+    var cta = document.getElementById("provider-cta");
+    if (DATA.formUrl) { cta.hidden = false; document.getElementById("form-link").href = DATA.formUrl; }
+    else cta.hidden = true;
+  }
+
+  function renderList() {
+    var t = T[state.lang];
+    var age = state.age === "" ? null : Number(state.age);
+    var items = DATA.providers.filter(function (p) {
+      if (state.view === "nov" && p.nov === "none") return false;
+      if (state.cat !== "all" && p.cat !== state.cat) return false;
+      if (age !== null && p.ageMin != null && (age < p.ageMin || age > p.ageMax)) return false;
+      return true;
+    }).sort(function (a, b) { return order[a.nov] - order[b.nov] || a.name.localeCompare(b.name); });
+
+    document.getElementById("count").textContent = t.count(items.length, state.view);
+    var list = document.getElementById("list");
+    list.textContent = "";
+    if (!items.length) { list.appendChild(el("div", { cls: "empty", text: t.empty })); return; }
+
+    items.forEach(function (p) {
+      var when = p.nov === "none" ? t.noNov : (p.novDates ? t.novPrefix + L(p.novDates) : t.tbcDates);
+      var facts = el("dl", { cls: "facts" }, [
+        el("div", null, [el("dt", { text: t.ages }), el("dd", { text: p.ageMin != null ? p.ageMin + "–" + p.ageMax + t.years : t.agesNone })]),
+        el("div", null, [el("dt", { text: t.price }), el("dd", { text: L(p.price) || "–" })]),
+        el("div", null, [el("dt", { text: t.where }), el("dd", { text: L(p.location) })]),
+        p.places ? el("div", null, [el("dt", { text: t.places }), el("dd", { text: L(p.places) })]) : null
+      ]);
+
+      var contact = el("div", { cls: "contact" });
+      if (p.email) {
+        var em = el("span", { text: p.email });
+        var cb = el("button", { type: "button", cls: "copy", text: t.copy, "aria-label": t.copy + " " + p.email });
+        cb.addEventListener("click", function () { copyText(cb, p.email); });
+        contact.appendChild(el("div", null, [em, document.createTextNode(" "), cb]));
+      }
+      if (p.phone) contact.appendChild(el("span", { text: p.phone }));
+
+      var foot = el("div", { cls: "card-foot" }, [
+        contact,
+        p.url ? el("a", { cls: "book", href: p.url, target: "_blank", rel: "noopener", text: t.book }) : null
+      ]);
+
+      list.appendChild(el("article", { cls: "card" + (p.nov === "none" ? " dim" : "") }, [
+        el("div", { cls: "card-head" }, [
+          el("div", null, [el("h2", { text: p.name }), el("div", { cls: "cat", text: t.cats[p.cat] || p.cat })]),
+          el("span", { cls: "pill " + p.nov, text: t.status[p.nov] })
+        ]),
+        el("div", { cls: "when", text: when }),
+        facts,
+        L(p.note) ? el("p", { cls: "note", text: L(p.note) }) : null,
+        foot
+      ]));
+    });
+  }
+
+  document.querySelectorAll("[data-lang]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      state.lang = b.getAttribute("data-lang");
+      try { localStorage.setItem("lcs-lang", state.lang); } catch (e) {}
+      renderStatic(); renderList();
+    });
+  });
+  document.querySelectorAll("[data-view]").forEach(function (b) {
+    b.addEventListener("click", function () { state.view = b.getAttribute("data-view"); renderStatic(); renderList(); });
+  });
+  document.getElementById("age").addEventListener("change", function (e) { state.age = e.target.value; renderList(); });
+
+  renderStatic();
+  renderList();
+})();
+</script>
+
+</body>
+
+</html>

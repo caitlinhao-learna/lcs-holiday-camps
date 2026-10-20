@@ -141,6 +141,9 @@ main .wrap { padding-block: 20px 40px; }
 footer { border-top: 1px solid var(--rule); color: var(--muted); font-size: 14px; }
 footer .wrap { padding-block: 20px 32px; display: grid; gap: 8px; }
 footer p { margin: 0; max-width: 70ch; }
+.disclaimer { background: var(--surface); border: 1px solid var(--rule-strong); border-radius: 12px; padding: 16px 18px; display: grid; gap: 8px; margin-bottom: 6px; }
+.disclaimer h2 { font-family: var(--font-display); font-weight: 700; font-size: 17px; color: var(--ink); margin: 0; }
+#disclaimer-body { display: grid; gap: 8px; }
 .provider-cta a { color: var(--accent); font-weight: 700; }
 @media (max-width: 520px) {
   .cahier-inner { padding-left: 44px; }
@@ -191,8 +194,11 @@ footer p { margin: 0; max-width: 70ch; }
 
 <footer>
   <div class="wrap">
+    <section class="disclaimer" aria-labelledby="disclaimer-h">
+      <h2 id="disclaimer-h" data-i18n="disclaimerTitle"></h2>
+      <div id="disclaimer-body"></div>
+    </section>
     <p data-i18n="footer"></p>
-    <p data-i18n="check"></p>
     <p id="updated"></p>
     <p class="provider-cta" id="provider-cta" hidden><span data-i18n="providerCta"></span> <a id="form-link" href="#" target="_blank" rel="noopener" data-i18n="providerLink"></a></p>
   </div>
@@ -320,7 +326,13 @@ footer p { margin: 0; max-width: 70ch; }
       count: function (n, v) { return n + (n === 1 ? " provider" : " providers") + (v === "nov" ? " for the November holidays" : " in the directory"); },
       empty: "No providers match these filters. Try another age or activity.",
       footer: "Compiled by the Parents and Friends Association of Lycée Condorcet Sydney. Details are supplied by each provider.",
-      check: "Please confirm dates, prices and availability with the provider before booking.",
+      disclaimerTitle: "Disclaimer",
+      disclaimer: [
+        "The LCS Holiday Activity Hub is a free, volunteer-led initiative created to help families discover school holiday activities and programs.",
+        "All program information is submitted directly by the respective providers. While we aim to keep the directory helpful and up to date, we do not independently verify or guarantee the accuracy of the information, quality, safety, availability or suitability of any program.",
+        "Parents and guardians are encouraged to conduct their own research and due diligence before making a booking, including checking provider credentials, supervision arrangements, insurance, child safety practices, pricing and cancellation policies.",
+        "The inclusion of a provider in this directory does not constitute an endorsement or recommendation by the volunteers, Parents Association or school. All bookings, payments and participation arrangements are made directly between families and providers."
+      ],
       updated: "Last updated ",
       providerCta: "Run a holiday program?", providerLink: "Submit your camp",
       dow: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], month: "Nov"
@@ -341,7 +353,13 @@ footer p { margin: 0; max-width: 70ch; }
       count: function (n, v) { return n + (n === 1 ? " prestataire" : " prestataires") + (v === "nov" ? " pour les vacances de novembre" : " dans l'annuaire"); },
       empty: "Aucun prestataire ne correspond à ces filtres. Essayez un autre âge ou une autre activité.",
       footer: "Annuaire réalisé par l'Association des Parents et Amis du Lycée Condorcet Sydney. Les informations sont fournies par chaque prestataire.",
-      check: "Merci de vérifier les dates, tarifs et disponibilités auprès du prestataire avant de réserver.",
+      disclaimerTitle: "Avertissement",
+      disclaimer: [
+        "Le LCS Holiday Activity Hub est une initiative gratuite, menée par des bénévoles, destinée à aider les familles à découvrir des activités et des programmes pendant les vacances scolaires.",
+        "Toutes les informations sur les programmes sont transmises directement par les prestataires concernés. Bien que nous nous efforcions de tenir cet annuaire utile et à jour, nous ne vérifions pas de manière indépendante et ne garantissons pas l'exactitude des informations, ni la qualité, la sécurité, la disponibilité ou l'adéquation des programmes.",
+        "Nous invitons les parents et tuteurs à effectuer leurs propres recherches et vérifications avant toute réservation, notamment les qualifications du prestataire, les modalités d'encadrement, l'assurance, les pratiques de protection de l'enfance, les tarifs et les conditions d'annulation.",
+        "La présence d'un prestataire dans cet annuaire ne constitue ni une approbation ni une recommandation de la part des bénévoles, de l'Association des parents ou de l'école. Les réservations, paiements et modalités de participation sont convenus directement entre les familles et les prestataires."
+      ],
       updated: "Dernière mise à jour : ",
       providerCta: "Vous proposez un programme de vacances ?", providerLink: "Inscrire votre stage",
       dow: ["dim.", "lun.", "mar.", "mer.", "jeu.", "ven.", "sam."], month: "nov."
@@ -421,6 +439,10 @@ footer p { margin: 0; max-width: 70ch; }
 
     var d = new Date(DATA.updated + "T12:00:00");
     document.getElementById("updated").textContent = t.updated + d.toLocaleDateString(state.lang === "fr" ? "fr-FR" : "en-AU", { day: "numeric", month: "long", year: "numeric" });
+
+    var db = document.getElementById("disclaimer-body");
+    db.textContent = "";
+    t.disclaimer.forEach(function (para) { db.appendChild(el("p", { text: para })); });
 
     var cta = document.getElementById("provider-cta");
     if (DATA.formUrl) { cta.hidden = false; document.getElementById("form-link").href = DATA.formUrl; }
